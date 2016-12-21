@@ -1,7 +1,5 @@
 var addon = require('bindings')('addon');
 
-var x = addon(10, function(msg){
-  console.log(msg);
+addon(10, function(obj){
+  console.log("result -> " + obj.plusOne());
 });
-
-console.log(x);

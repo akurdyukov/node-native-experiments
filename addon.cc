@@ -5,13 +5,9 @@ void RunCallback(const Nan::FunctionCallbackInfo<v8::Value>& info) {
   // get callback
   v8::Local<v8::Function> cb = info[1].As<v8::Function>();
 
-  // create object
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
-  obj->Set(Nan::New("msg").ToLocalChecked(), MyObject::NewInstance(info[0]));
-
   // prepare output
   const unsigned argc = 1;
-  v8::Local<v8::Value> argv[argc] = { obj };
+  v8::Local<v8::Value> argv[argc] = { MyObject::NewInstance(info[0]) };
   Nan::MakeCallback(Nan::GetCurrentContext()->Global(), cb, argc, argv);
 }
 
