@@ -1,5 +1,6 @@
 #include <nan.h>
 #include "myobject.h"
+#include "native.h"
 
 using namespace v8;
 
@@ -23,28 +24,33 @@ void MyObject::Init() {
 }
 
 void MyObject::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+  // create JS object and wrap
   MyObject* obj = new MyObject();
-  obj->counter_ = info[0]->IsUndefined() ? 0 : info[0]->NumberValue();
   obj->Wrap(info.This());
 
   info.GetReturnValue().Set(info.This());
 }
 
 
-v8::Local<v8::Object> MyObject::NewInstance(int start) {
+v8::Local<v8::Object> MyObject::NewInstance(NativeObject* native) {
   Nan::EscapableHandleScope scope;
 
-  const unsigned argc = 1;
-  v8::Local<v8::Value> argv[argc] = { Nan::New<v8::Number>(start) };
+  // create new JS object
+  const unsigned argc = 0;
+  v8::Local<v8::Value> argv[argc] = { };
   v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
   v8::Local<v8::Object> instance = cons->NewInstance(argc, argv);
+
+  // push aggregated into MyObject
+  MyObject* wrapped = Nan::ObjectWrap::Unwrap<MyObject>(instance);
+  wrapped->_native = native;
 
   return scope.Escape(instance);
 }
 
 void MyObject::PlusOne(const Nan::FunctionCallbackInfo<v8::Value>& info) {
   MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.This());
-  obj->counter_ += 1;
+  int newValue = obj->_native->plusOne();
 
-  info.GetReturnValue().Set(Nan::New(obj->counter_));
+  info.GetReturnValue().Set(Nan::New(newValue));
 }

@@ -1,6 +1,7 @@
 #include <nan.h>
 #include "async.h"
 #include "myobject.h"
+#include "native.h"
 
 using v8::Function;
 using v8::Local;
@@ -25,7 +26,8 @@ class ObjectCreateWorker : public AsyncWorker {
   // here, so everything we need for input and output
   // should go on `this`.
   void Execute () {
-    start += 1;
+    native = new NativeObject(start);
+    // do something long here
   }
 
   // Executed when the async work is complete
@@ -36,7 +38,7 @@ class ObjectCreateWorker : public AsyncWorker {
 
     const unsigned argc = 1;
     v8::Local<v8::Value> argv[argc] = { 
-        MyObject::NewInstance(start)
+        MyObject::NewInstance(native)
     };
 
     callback->Call(argc, argv);
@@ -44,6 +46,7 @@ class ObjectCreateWorker : public AsyncWorker {
 
  private:
   int start;
+  NativeObject* native;
 };
 
 // Asynchronous access to the `Estimate()` function
