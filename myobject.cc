@@ -5,7 +5,11 @@
 using namespace v8;
 
 MyObject::MyObject() {};
-MyObject::~MyObject() {};
+MyObject::~MyObject() {
+  if (_native != NULL) {
+    delete _native;
+  }
+};
 
 Nan::Persistent<v8::Function> MyObject::constructor;
 
@@ -31,7 +35,6 @@ void MyObject::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
   info.GetReturnValue().Set(info.This());
 }
 
-
 v8::Local<v8::Object> MyObject::NewInstance(NativeObject* native) {
   Nan::EscapableHandleScope scope;
 
@@ -42,8 +45,8 @@ v8::Local<v8::Object> MyObject::NewInstance(NativeObject* native) {
   v8::Local<v8::Object> instance = cons->NewInstance(argc, argv);
 
   // push aggregated into MyObject
-  MyObject* wrapped = Nan::ObjectWrap::Unwrap<MyObject>(instance);
-  wrapped->_native = native;
+  MyObject* unwrapped = Nan::ObjectWrap::Unwrap<MyObject>(instance);
+  unwrapped->_native = native;
 
   return scope.Escape(instance);
 }
