@@ -6,7 +6,7 @@
 class MyObject : public Nan::ObjectWrap {
  public:
   static void Init();
-  static v8::Local<v8::Object> NewInstance(v8::Local<v8::Value> arg);
+  static v8::Local<v8::Object> NewInstance(int start);
 
  private:
   MyObject();
