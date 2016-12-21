@@ -1,0 +1,16 @@
+{
+  "name": "callbacks",
+  "version": "0.0.0",
+  "description": "Node.js Addons Example #3",
+  "main": "addon.js",
+  "private": true,
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "~1.2.1",
+    "nan": "^2.0.0",
+    "node-cmake": "^2.1.1"
+  },
+  "devDependencies": {
+    "node-cmake": "^2.1.1"
+  }
+}
