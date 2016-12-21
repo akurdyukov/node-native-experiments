@@ -1,0 +1,7 @@
+A bunch of simple experiments with Node native modules.
+
+# `npm install -g node_gyp` to install Node build tool
+# `npm install` to prepare local dependencies
+# `node-gyp rebuild` to build
+# `node ./` to run
+
